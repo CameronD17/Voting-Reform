@@ -22,4 +22,4 @@ https://twitter.com/CameronD17
 
 ## Copyright and License
 
-Copyright 2015 Cameron Doyle. Code released under the Apache 2.0 license.
+Copyright 2015 Cameron Doyle. Code released under the [Apache 2.0](https://github.com/CameronD17/Voting-Reform/blob/master/LICENSE) license.
