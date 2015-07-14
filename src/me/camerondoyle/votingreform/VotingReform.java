@@ -5,7 +5,6 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Scanner;
 
 public class VotingReform
@@ -16,18 +15,12 @@ public class VotingReform
 
     public static void main(String[] args)
     {
-        //generateConstituencies();        
-        //printConstituencies();
-        String[] testParties = {"true","true","true","true","true","true","true","true","true","true","true","true"};
-        Constituency testConstituency = new Constituency(1, "Test Location", 475123, 5, 100000, 95025, testParties);
-        constituencies.add(testConstituency);
-        
-        testConstituency.print();
+        generateConstituencies();
     }
 
     public static void generateConstituencies()
     {
-        String csvFile = "C:/Users/doyleca/workspace/Voting Reform/src/me/camerondoyle/votingreform/constituencies.csv";
+        String csvFile = "C:/Users/doyleca/Dropbox/Personal/GitHub/Voting-Reform/src/me/camerondoyle/votingreform/constituencies.csv";
         BufferedReader br = null;
         String line = "";
         String csvSplit = ",";
@@ -46,9 +39,7 @@ public class VotingReform
                 int ceiling = Integer.parseInt(constituency[4]);
                 int perMP = Integer.parseInt(constituency[5]);
                 
-                String[] running = Arrays.copyOfRange(constituency, 6, 17);
-                
-                constituencies.add(new Constituency(constid, name, voters, seats, ceiling, perMP, running));
+                constituencies.add(new Constituency(constid, name, voters, seats, ceiling, perMP, generateCandidates(constid)));                      
             }
         } 
         catch (FileNotFoundException e)
@@ -74,6 +65,58 @@ public class VotingReform
             }
         }
     }
+    
+    public static ArrayList<Candidate> generateCandidates(int id)
+    {
+	    String csvFile = "C:/Users/doyleca/Dropbox/Personal/GitHub/Voting-Reform/src/me/camerondoyle/votingreform/candidates.csv";
+	    BufferedReader br = null;
+	    String line = "";
+	    String csvSplit = ",";
+	    ArrayList<Candidate> candidates = new ArrayList<Candidate>();
+	
+	    try
+	    {
+	        br = new BufferedReader(new FileReader(csvFile));
+	        br.readLine(); // Skip header line
+	        while ((line = br.readLine()) != null)
+	        {
+	            String[] constituency = line.split(csvSplit);
+	            int constid = Integer.parseInt(constituency[0]);
+	            int candid = Integer.parseInt(constituency[1]);
+	            String name = constituency[2];
+	            String party = constituency[3];
+	            
+	            if(constid==id)
+	            {
+	            	candidates.add(new Candidate(candid, constid, name, party));           
+	            }
+	        }
+	    } 
+	    catch (FileNotFoundException e)
+	    {
+	        e.printStackTrace();
+	    } 
+	    catch (IOException e)
+	    {
+	        e.printStackTrace();
+	    } 
+	    finally
+	    {
+	        if (br != null)
+	        {
+	            try
+	            {
+	                br.close();
+	            } 
+	            catch (IOException e)
+	            {
+	                e.printStackTrace();
+	            }
+	        }
+	    }
+	    
+	    return candidates;
+    }	
     
     public static void printConstituencies()
     {
